@@ -6,6 +6,6 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 gemspec
 
 gem "regexp_parser"
-
+gem "terminal-table"
 group :development, :test do
 end
