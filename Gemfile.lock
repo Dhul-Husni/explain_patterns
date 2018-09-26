@@ -6,7 +6,16 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (5.2.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    concurrent-ruby (1.0.5)
     diff-lcs (1.3)
+    i18n (1.1.0)
+      concurrent-ruby (~> 1.0)
+    minitest (5.11.3)
     rake (10.5.0)
     regexp_parser (1.1.0)
     rspec (3.8.0)
@@ -24,6 +33,11 @@ GEM
     rspec-support (3.8.0)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
+    thread_safe (0.3.6)
+    tree_support (0.1.6)
+      activesupport
+    tzinfo (1.2.5)
+      thread_safe (~> 0.1)
     unicode-display_width (1.4.0)
 
 PLATFORMS
@@ -36,6 +50,7 @@ DEPENDENCIES
   regexp_parser
   rspec (~> 3.0)
   terminal-table
+  tree_support
 
 BUNDLED WITH
    1.16.5
