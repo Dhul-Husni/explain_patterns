@@ -7,7 +7,11 @@ module ExplainPattern
     @temp = []
 
     class << self
-     attr_reader :temp
+      attr_reader :temp
+
+      def remove_temp
+        remove_instance_variable(:@temp)
+      end
     end
 
     def initialize(regexp)
@@ -18,10 +22,10 @@ module ExplainPattern
     def display_tree
       struct = Node.new(@regexp) { traverse_tree @regexp }
       puts TreeSupport.tree struct
+      Tree.remove_temp
     end
 
     class Node
-      attr_accessor :name, :parent, :children
 
       def initialize(regexp, &block)
         @regexp = regexp
@@ -33,7 +37,9 @@ module ExplainPattern
 
       def add(*args, &block)
         tap do
-          children << self.class.new(*args, &block).tap { |v| v.parent = self }
+          children << self.class.new(*args, &block).tap do |instance|
+             instance.parent = self
+          end
         end
       end
 
