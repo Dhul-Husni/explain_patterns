@@ -1,18 +1,52 @@
-require "explain_pattern/version"
-require "regexp_pattern"
-require "terminal-table/import"
+require 'explain_pattern/version'
+require 'regexp_parser'
+require 'terminal-table/import'
 
 module ExplainPattern
+  class Tree
+    @temp = []
 
-  regex = /a?(b+(c)d)*(?<name>[0-9]+)(?=abc)/
+    class << self
+     attr_reader :temp
+    end
 
-  module Tree
-    tree = Regexp::Parser.parse(regex)
-  end
+    def initialize(regexp)
+      @regexp = Regexp::Parser.parse regexp
+      display_tree
+    end
 
-  module Table
-  end
+    def display_tree
+      struct = Node.new(@regexp) { traverse_tree @regexp }
+      puts TreeSupport.tree struct
+    end
 
-  class String
+    class Node
+      attr_accessor :name, :parent, :children
+
+      def initialize(regexp, &block)
+        @regexp = regexp
+        @name = @regexp.to_s
+        @children = []
+        @temp = Tree.temp
+        instance_eval(&block) if block_given?
+      end
+
+      def add(*args, &block)
+        tap do
+          children << self.class.new(*args, &block).tap { |v| v.parent = self }
+        end
+      end
+
+      def traverse_tree(exp)
+        exp.traverse do |event, exp|
+          unless @temp.include? exp
+            add(exp) do
+              @temp << exp
+              traverse_tree exp if event == :enter
+            end
+          end
+        end
+      end
+    end
   end
 end
