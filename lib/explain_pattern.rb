@@ -7,7 +7,6 @@ module ExplainPattern
     @temp = []
 
     class << self
-      attr_reader :temp
 
       def remove_temp
         remove_instance_variable(:@temp)
