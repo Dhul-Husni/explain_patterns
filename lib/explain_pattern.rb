@@ -8,8 +8,8 @@ module ExplainPattern
 
     class << self
 
-      def remove_temp
-        remove_instance_variable(:@temp)
+      def clear_temp
+        @temp = []
       end
     end
 
@@ -21,7 +21,7 @@ module ExplainPattern
     def display_tree
       struct = Node.new(@regexp) { traverse_tree @regexp }
       puts TreeSupport.tree struct
-      Tree.remove_temp
+      Tree.clear_temp
     end
 
     class Node
