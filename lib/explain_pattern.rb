@@ -3,21 +3,7 @@ require 'regexp_parser'
 require 'tree_support'
 
 module ExplainPattern
-  # def identify
-  #   "\033[38;5;162mBlah\033[0m"
-  # end
-  # Creates a tree representation of a regexp
-  #
   class Tree
-    @temp = []
-
-    class << self
-      attr_accessor :temp
-      def clear_temp
-        @temp = []
-      end
-    end
-
     # Creates a new regexp tree
     #
     # @param [String] regular expression
@@ -30,8 +16,9 @@ module ExplainPattern
     #
     # @param [String] regular expression
     def struct
-      Node.new(@regexp) { traverse_exp @regexp }
-      Tree.clear_temp
+      tree = Node.new(@regexp) { traverse_exp @regexp }
+      Node.clear_temp
+      return tree
     end
     alias architecture struct
 
@@ -44,16 +31,17 @@ module ExplainPattern
     # Creates each tree node
     #
     class Node
+      attr_accessor :name, :parent, :children
 
-      # @temp = []
+      @temp = []
 
-      # class << self
-      #   attr_accessor :temp
+      class << self
+        attr_accessor :temp
 
-      #   def clear_temp
-      #     @temp = []
-      #   end
-      # end
+        def clear_temp
+          @temp = []
+        end
+      end
 
       # Initializes each node of the tree
       #
@@ -76,7 +64,7 @@ module ExplainPattern
         @regexp   = regexp
         @name     = @regexp.to_s # Root of the tree
         @children = []
-        @temp     = Tree.temp
+        @temp     = Node.temp
         instance_eval(&block) if block_given?
       end
 
@@ -84,7 +72,7 @@ module ExplainPattern
       #
       def add(*args, &block)
         tap do
-          @children << self.class.new(*args, &block).tap do |instance|
+          children << self.class.new(*args, &block).tap do |instance|
             instance.parent = self
           end
         end
@@ -98,7 +86,7 @@ module ExplainPattern
           unless @temp.include? exp
             add(exp) do
               @temp << exp
-              traverse_exp if event == :enter
+              traverse_exp exp if event == :enter
             end
           end
         end
