@@ -1,8 +1,12 @@
 require 'explain_pattern/version'
 require 'regexp_parser'
-require 'terminal-table/import'
+require 'tree_support'
 
 module ExplainPattern
+
+  def identify regexp
+  end
+
   class Tree
     @temp = []
 
