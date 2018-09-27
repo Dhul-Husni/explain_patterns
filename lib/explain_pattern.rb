@@ -4,7 +4,8 @@ require 'tree_support'
 
 module ExplainPattern
   class Tree
-    # Creates a new regexp tree
+
+    # Create a new regexp tree
     #
     # @param [String] regular expression
     def initialize(regexp)
@@ -12,7 +13,7 @@ module ExplainPattern
       display_tree
     end
 
-    # Kicks off the tree construction
+    # Kick off the tree construction
     #
     # @param [String] regular expression
     def struct
@@ -22,14 +23,10 @@ module ExplainPattern
     end
     alias architecture struct
 
-    # Displays the tree
-    #
     def display_tree
       puts TreeSupport.tree architecture
     end
 
-    # Creates each tree node
-    #
     class Node
       attr_accessor :name, :parent, :children
 
@@ -43,7 +40,7 @@ module ExplainPattern
         end
       end
 
-      # Initializes each node of the tree
+      # Create a new node/leaf on the tree
       #
       # @param [Regexp::Expression]
       # @param [Block] How the tree should be created
@@ -68,7 +65,7 @@ module ExplainPattern
         instance_eval(&block) if block_given?
       end
 
-      # Actively creates new nodes and assigns parents an children
+      # Actively add a new node to the tree
       #
       def add(*args, &block)
         tap do
@@ -78,7 +75,7 @@ module ExplainPattern
         end
       end
 
-      # Traverses each exp; creating new nodes
+      # Traverses each exp; creating new Nodes
       #
       # @param [Regexp::Expression]
       def traverse_exp(regexp)
