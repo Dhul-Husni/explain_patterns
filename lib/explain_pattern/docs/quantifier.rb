@@ -1,0 +1,1 @@
+QUANTIFIER = {}.freeze
